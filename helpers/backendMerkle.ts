@@ -13,7 +13,6 @@ export default class BackendMerkle {
 
     tree: MerkleTree
     root: string
-    // @ts-ignore
     getProof (address: string, amount: number) {
         const amountEncode = web3.eth.abi.encodeParameter("uint256", amount);
 

@@ -14,7 +14,6 @@ export default class BackendECDSA {
 
     owner: SignerWithAddress
     allowList: string[]
-    // @ts-ignore
     async checkAndSign (user: string, amount: number) {
 
         // In real implementation others checks are required for example amount
