@@ -9,25 +9,23 @@ export default class BackendMerkle {
         this.tree = createMerkleTree(args);
 
         this.root = this.tree.getHexRoot();
-
-        this.getProof = (address: string, amount: number) => {
-            const amountEncode = web3.eth.abi.encodeParameter("uint256", amount);
-
-            const node = keccak256(Buffer.concat(
-                [
-                    Buffer.from(address.replace("0x", ""), "hex"),
-                    Buffer.from(amountEncode.replace("0x", ""), "hex")
-                ])
-            );
-
-            return  this.tree.getHexProof(node);
-        }
     }
 
     tree: MerkleTree
     root: string
     // @ts-ignore
-    getProof(address: string, amount: number): string[]
+    getProof (address: string, amount: number) {
+        const amountEncode = web3.eth.abi.encodeParameter("uint256", amount);
+
+        const node = keccak256(Buffer.concat(
+            [
+                Buffer.from(address.replace("0x", ""), "hex"),
+                Buffer.from(amountEncode.replace("0x", ""), "hex")
+            ])
+        );
+
+        return  this.tree.getHexProof(node);
+    }
 }
 
 const createMerkleTree = (args: {address: string, amount: number}[]) => {
