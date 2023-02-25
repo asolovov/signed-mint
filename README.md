@@ -65,7 +65,7 @@ function signedMintECDSA(uint256 amount, bytes32 message, bytes calldata signatu
     _mintTo(msg.sender, amount);
 }
 ```
-We verify signature using `ECDSA.recover` method from Open Zeppelin ECDSA.sol smart-contract
+We verify signature using `ECDSA.recover` method from [Open Zeppelin ECDSA.sol smart-contract](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/cryptography/ECDSA.sol)
 and by comparing recovered address and owner address:
 ```solidity
 function _recoverSigner(bytes32 message, bytes calldata signature) internal pure returns (address) {
