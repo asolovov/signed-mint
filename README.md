@@ -57,10 +57,17 @@ const sign = await this.owner.signMessage(messageBytes);
 
 This is a `mint` function that uses signature and message hash to verify the operation:
 ```solidity
-function signedMintECDSA(uint256 amount, bytes32 message, bytes calldata signature) external payable {
-    require(_checkSignature(message, signature), "Signed mint: signature is not valid");
-    require(_checkMessage(message, address(msg.sender), amount), "Signed mint: message is not valid");
-    require(msg.value == _price * amount, "Signed mint: not enough funds");
+function signedMintECDSA(
+    uint256 amount, 
+    bytes32 message, 
+    bytes calldata signature
+) external payable {
+    require(_checkSignature(message, signature), 
+        "Signed mint: signature is not valid");
+    require(_checkMessage(message, address(msg.sender), amount),
+        "Signed mint: message is not valid");
+    require(msg.value == _price * amount, 
+        "Signed mint: not enough funds");
 
     _mintTo(msg.sender, amount);
 }
@@ -68,7 +75,10 @@ function signedMintECDSA(uint256 amount, bytes32 message, bytes calldata signatu
 We verify signature using `ECDSA.recover` method from [Open Zeppelin ECDSA.sol smart-contract](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/cryptography/ECDSA.sol)
 and by comparing recovered address and owner address:
 ```solidity
-function _recoverSigner(bytes32 message, bytes calldata signature) internal pure returns (address) {
+function _recoverSigner(
+    bytes32 message, 
+    bytes calldata signature
+) internal pure returns (address) {
     bytes32 messageDigest = keccak256(
         abi.encodePacked(
             "\x19Ethereum Signed Message:\n32",
@@ -78,14 +88,21 @@ function _recoverSigner(bytes32 message, bytes calldata signature) internal pure
     return ECDSA.recover(messageDigest, signature);
 }
 
-function _checkSignature(bytes32 message, bytes calldata signature) internal view returns (bool) {
+function _checkSignature(
+    bytes32 message, 
+    bytes calldata signature
+) internal view returns (bool) {
     return _recoverSigner(message, signature) == owner();
 }
 ```
 We verify message hash by comparing received hash and hash that we generate in smart-contract
 method also using `keccak256` hash function.
 ```solidity
-function _checkMessage(bytes32 message, address caller, uint256 amount) internal pure returns(bool) {
+function _checkMessage(
+    bytes32 message, 
+    address caller, 
+    uint256 amount
+) internal pure returns(bool) {
     return message == keccak256(abi.encodePacked(caller, amount));
 }
 ```
