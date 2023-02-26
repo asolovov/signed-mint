@@ -31,7 +31,8 @@ const createMerkleTree = (args: {address: string, amount: number}[]) => {
    const leafs = args.map(arg => keccak256(Buffer.concat(
                    [
                       Buffer.from(arg.address.replace("0x", ""), "hex"),
-                      Buffer.from(web3.eth.abi.encodeParameter("uint256", arg.amount).replace("0x", ""), "hex")
+                      Buffer.from(web3.eth.abi.encodeParameter("uint256", arg.amount)
+                              .replace("0x", ""), "hex")
                    ])
            )
    );
@@ -76,7 +77,9 @@ function _getLeaf(address user, uint256 amount) internal pure returns(bytes32) {
    return keccak256(abi.encodePacked(user, amount));
 }
 
-function _validateProof(address user, uint256 amount, bytes32[] calldata proof) internal view returns(bool) {
+function _validateProof(
+   address user, uint256 amount, bytes32[] calldata proof
+) internal view returns(bool) {
    return MerkleProof.verifyCalldata(proof, _root, _getLeaf(user, amount));
 }
 ```
